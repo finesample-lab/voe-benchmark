@@ -55,7 +55,7 @@ A composite score cannot hide an evidence failure. A release pass also requires 
 
 ## Domain examples
 
-The first corpus contains ten cases across:
+The first corpus contains eleven cases across:
 
 - manufacturing quality and supplier certificates;
 - contracts, amendments, invoices, and payments;
