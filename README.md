@@ -77,6 +77,12 @@ The corpus and labels are public, so this is a transparent conformance benchmark
 
 This repository contains benchmark code, synthetic fixtures, schemas, and examples. Voe's product source remains private. The benchmark is MIT-licensed; that license does not apply to Voe container images, binaries, services, or fineSample trademarks.
 
+Voe is one implementation of the evidence infrastructure this benchmark is
+designed to exercise. Its public product and operator documentation is at
+[docs.runvoe.com](https://docs.runvoe.com/). The benchmark contract remains
+system-neutral: using Voe is not required, and Voe receives no scoring
+privilege.
+
 ## Contributing
 
 New cases must include a falsifiable expected result, synthetic or properly licensed evidence, and a reason the case cannot be passed by plausible prose alone. See [CONTRIBUTING.md](CONTRIBUTING.md).
