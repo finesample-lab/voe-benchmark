@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.0",
+  "case_id": "construction.change-order.001",
+  "domain": "construction",
+  "title": "A Slack go-ahead does not satisfy the signed change-order requirement",
+  "caller": {"principal": "site:foreman", "roles": ["site_manager"]},
+  "events": [
+    {
+      "op": "capture",
+      "record": {
+        "id": "construction.contract.clause",
+        "channel": "document",
+        "occurred_at": "2026-01-10T17:00:00Z",
+        "author": {"id": "org:owner-and-builder", "kind": "organization"},
+        "evidence_grade": "record",
+        "evidence_scope": ["executed_agreement"],
+        "raw": "Section 8.4: extra work above CAD 5,000 requires a change order signed by the Owner before work begins."
+      }
+    },
+    {
+      "op": "capture",
+      "record": {
+        "id": "construction.pm.slack",
+        "channel": "slack",
+        "occurred_at": "2026-09-25T08:40:00Z",
+        "author": {"id": "person:project-manager", "kind": "human"},
+        "evidence_grade": "record",
+        "evidence_scope": ["authorship"],
+        "raw": "Go ahead with the drainage reroute. We cannot wait another day."
+      }
+    },
+    {
+      "op": "capture",
+      "record": {
+        "id": "construction.co17.draft",
+        "channel": "document",
+        "occurred_at": "2026-09-25T09:10:00Z",
+        "author": {"id": "person:project-manager", "kind": "human"},
+        "evidence_grade": "record",
+        "evidence_scope": ["authorship"],
+        "raw": "Change Order 17; drainage reroute; CAD 18,600; contractor signed; Owner signature blank."
+      }
+    }
+  ],
+  "query": {"text": "May the drainage reroute begin under the recorded approval?", "as_of": "2026-09-25T09:30:00Z"},
+  "expected": {
+    "relevant_record_ids": ["construction.contract.clause", "construction.co17.draft", "construction.pm.slack"],
+    "forbidden_output_record_ids": [],
+    "claims": [
+      {"id": "owner_signature_required", "description": "The executed contract requires the Owner's signature before this work begins.", "supporting_record_ids": ["construction.contract.clause"]}
+    ],
+    "gaps": [
+      {"id": "signed_change_order_missing", "description": "Change Order 17 has no Owner signature."}
+    ],
+    "decision": "withhold",
+    "decision_reason": "The Slack instruction is attributable but does not satisfy the recorded contractual approval condition."
+  }
+}

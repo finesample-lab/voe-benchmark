@@ -1,0 +1,9 @@
+{
+  "schema": "emb.domain-vocabulary",
+  "schema_version": 1,
+  "domain": "contracts",
+  "record_types": ["contract", "amendment", "clause", "obligation", "invoice", "payment", "receipt"],
+  "relationship_types": ["contains_clause", "creates_obligation", "amends", "settles", "evidenced_by"],
+  "claim_types": ["term_in_force", "amount_due", "payment_cleared"],
+  "gap_types": ["amendment_execution_missing", "payment_receipt_missing", "acceptance_unconfirmed"]
+}

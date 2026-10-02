@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.0",
+  "case_id": "customer-support.refund-status.001",
+  "domain": "customer-support",
+  "title": "A promised refund and a submitted action are not a completed refund",
+  "caller": {"principal": "support:dev", "roles": ["support_agent"]},
+  "events": [
+    {
+      "op": "capture",
+      "record": {
+        "id": "support.refund.promise",
+        "channel": "email",
+        "occurred_at": "2026-09-18T13:00:00Z",
+        "author": {"id": "person:support-agent", "kind": "human"},
+        "evidence_grade": "record",
+        "evidence_scope": ["authorship", "commitment"],
+        "raw": "We will refund order O-991 for USD 129.00 today."
+      }
+    },
+    {
+      "op": "capture",
+      "record": {
+        "id": "support.agent.submission",
+        "channel": "agent_write",
+        "occurred_at": "2026-09-18T13:05:00Z",
+        "author": {"id": "agent:refund-helper", "kind": "agent"},
+        "evidence_grade": "record",
+        "evidence_scope": ["authorship"],
+        "raw": "Refund submitted for order O-991."
+      }
+    },
+    {
+      "op": "capture",
+      "record": {
+        "id": "support.provider.declined",
+        "channel": "provider_webhook",
+        "occurred_at": "2026-09-18T13:06:00Z",
+        "author": {"id": "provider:payments", "kind": "provider"},
+        "evidence_grade": "record",
+        "evidence_scope": ["provider_status"],
+        "raw": "Refund rf_991 for order O-991 declined: original charge is under dispute. No funds transferred."
+      }
+    }
+  ],
+  "query": {"text": "Was the refund for order O-991 completed?", "as_of": "2026-09-18T13:10:00Z"},
+  "expected": {
+    "relevant_record_ids": ["support.provider.declined", "support.agent.submission", "support.refund.promise"],
+    "forbidden_output_record_ids": [],
+    "claims": [
+      {"id": "refund_declined", "description": "The payment provider declined the refund and transferred no funds.", "supporting_record_ids": ["support.provider.declined"]}
+    ],
+    "gaps": [],
+    "decision": "answer",
+    "decision_reason": "The external provider receipt establishes the outcome."
+  }
+}

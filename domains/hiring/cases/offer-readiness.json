@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.0",
+  "case_id": "hiring.offer-readiness.001",
+  "domain": "hiring",
+  "title": "Acceptance is established while the background check is not",
+  "caller": {"principal": "recruiter:nora", "roles": ["recruiter"]},
+  "events": [
+    {
+      "op": "capture",
+      "record": {
+        "id": "hiring.offer.42",
+        "channel": "document",
+        "occurred_at": "2026-09-03T16:00:00Z",
+        "author": {"id": "org:acme", "kind": "organization"},
+        "evidence_grade": "record",
+        "evidence_scope": ["offer_issued"],
+        "raw": "Offer 42 for Senior Controls Engineer; start date October 15; signed by Acme; candidate signature pending."
+      }
+    },
+    {
+      "op": "capture",
+      "record": {
+        "id": "hiring.acceptance.email",
+        "channel": "email",
+        "occurred_at": "2026-09-04T09:12:00Z",
+        "author": {"id": "candidate:ravi", "kind": "human"},
+        "evidence_grade": "record",
+        "evidence_scope": ["authorship", "offer_acceptance"],
+        "raw": "I accept Offer 42 and the October 15 start date. Attached is my signed copy. Ravi."
+      }
+    },
+    {
+      "op": "capture",
+      "record": {
+        "id": "hiring.agent.background-note",
+        "channel": "agent_write",
+        "occurred_at": "2026-09-05T10:00:00Z",
+        "author": {"id": "agent:recruiting-helper", "kind": "agent"},
+        "evidence_grade": "record",
+        "evidence_scope": ["authorship"],
+        "raw": "Background check passed. Candidate is ready to hire."
+      }
+    }
+  ],
+  "query": {"text": "Is Ravi ready to be marked cleared for hire?", "as_of": "2026-09-05T11:00:00Z"},
+  "expected": {
+    "relevant_record_ids": ["hiring.offer.42", "hiring.acceptance.email", "hiring.agent.background-note"],
+    "forbidden_output_record_ids": [],
+    "claims": [
+      {"id": "offer_42_accepted", "description": "Ravi stated that he accepted Offer 42.", "supporting_record_ids": ["hiring.acceptance.email"]}
+    ],
+    "gaps": [
+      {"id": "background_provider_report_missing", "description": "No background-check provider result is present."}
+    ],
+    "decision": "withhold",
+    "decision_reason": "Acceptance is supported, but the agent-authored clearance statement cannot establish the provider outcome."
+  }
+}

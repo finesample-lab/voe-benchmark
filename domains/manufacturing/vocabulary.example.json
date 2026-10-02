@@ -1,0 +1,9 @@
+{
+  "schema": "emb.domain-vocabulary",
+  "schema_version": 1,
+  "domain": "manufacturing",
+  "record_types": ["lot", "inspection", "release", "certificate", "sensor_reading", "shipment"],
+  "relationship_types": ["inspects", "releases", "certifies", "belongs_to_lot", "supersedes"],
+  "claim_types": ["condition_in_range", "lot_released", "material_certified"],
+  "gap_types": ["qa_release_missing", "inspection_missing", "certificate_conflict"]
+}

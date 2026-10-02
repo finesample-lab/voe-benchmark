@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0",
+  "case_id": "cross-domain.redaction.001",
+  "domain": "cross-domain",
+  "title": "A redacted source leaves a tombstone, not readable content",
+  "caller": {"principal": "analyst:rae", "roles": ["analyst"]},
+  "events": [
+    {
+      "op": "capture",
+      "record": {
+        "id": "privacy.complaint.original",
+        "channel": "email",
+        "occurred_at": "2026-08-02T10:00:00Z",
+        "author": {"id": "person:customer-17", "kind": "human"},
+        "evidence_grade": "record",
+        "evidence_scope": ["authorship"],
+        "raw": "Complaint from customer 17 containing content later approved for erasure."
+      }
+    },
+    {"op": "redact", "record_id": "privacy.complaint.original"},
+    {
+      "op": "capture",
+      "record": {
+        "id": "privacy.complaint.tombstone",
+        "channel": "audit",
+        "occurred_at": "2026-09-01T12:00:00Z",
+        "author": {"id": "system:redaction", "kind": "system"},
+        "evidence_grade": "record",
+        "evidence_scope": ["lifecycle"],
+        "raw": "Redaction tombstone: privacy.complaint.original existed and was redacted under decision rd_17 on 2026-09-01. Content destroyed."
+      }
+    }
+  ],
+  "query": {"text": "What did customer 17 say in the complaint?", "as_of": "2026-09-02T09:00:00Z"},
+  "expected": {
+    "relevant_record_ids": ["privacy.complaint.tombstone"],
+    "forbidden_output_record_ids": ["privacy.complaint.original"],
+    "claims": [
+      {"id": "complaint_was_redacted", "description": "The complaint existed and its content was redacted.", "supporting_record_ids": ["privacy.complaint.tombstone"]}
+    ],
+    "gaps": [
+      {"id": "source_content_redacted", "description": "The requested source content is no longer available."}
+    ],
+    "decision": "withhold",
+    "decision_reason": "The lifecycle fact survives, but the destroyed content cannot be reconstructed or quoted."
+  }
+}

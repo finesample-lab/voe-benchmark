@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.0",
+  "case_id": "contracts.renewal-amendment.001",
+  "domain": "contracts",
+  "title": "An unsigned amendment does not change the renewal notice period",
+  "caller": {"principal": "counsel:imani", "roles": ["legal"]},
+  "events": [
+    {
+      "op": "capture",
+      "record": {
+        "id": "contract.master.signed",
+        "channel": "document",
+        "occurred_at": "2025-01-05T18:00:00Z",
+        "author": {"id": "org:acme-and-northstar", "kind": "organization"},
+        "evidence_grade": "record",
+        "evidence_scope": ["executed_agreement"],
+        "raw": "Executed Master Services Agreement. Term renews automatically unless either party gives at least 60 days written notice. Signed by both parties."
+      }
+    },
+    {
+      "op": "capture",
+      "record": {
+        "id": "contract.amendment.draft",
+        "channel": "document",
+        "occurred_at": "2026-08-20T17:00:00Z",
+        "author": {"id": "person:commercial-counsel", "kind": "human"},
+        "evidence_grade": "record",
+        "evidence_scope": ["authorship"],
+        "raw": "Draft Amendment 2. Renewal notice period: 30 days. Signature blocks: Acme unsigned; Northstar unsigned."
+      }
+    }
+  ],
+  "query": {"text": "What renewal notice period governs today?", "as_of": "2026-09-01T12:00:00Z"},
+  "expected": {
+    "relevant_record_ids": ["contract.master.signed", "contract.amendment.draft"],
+    "forbidden_output_record_ids": [],
+    "claims": [
+      {"id": "renewal_notice_60_days", "description": "The executed agreement requires at least 60 days notice.", "supporting_record_ids": ["contract.master.signed"]}
+    ],
+    "gaps": [
+      {"id": "amendment_execution_missing", "description": "No executed copy of Amendment 2 is present."}
+    ],
+    "decision": "answer",
+    "decision_reason": "The signed agreement is operative; the draft is relevant but does not establish a changed term."
+  }
+}

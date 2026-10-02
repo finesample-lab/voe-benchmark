@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.0",
+  "case_id": "cross-domain.access-control.001",
+  "domain": "cross-domain",
+  "title": "Relevant evidence remains unavailable to an unauthorized caller",
+  "caller": {"principal": "contractor:kim", "roles": ["external_contractor"]},
+  "events": [
+    {
+      "op": "capture",
+      "record": {
+        "id": "board.minutes.private",
+        "channel": "document",
+        "occurred_at": "2026-09-15T20:00:00Z",
+        "author": {"id": "org:acme-board", "kind": "organization"},
+        "evidence_grade": "record",
+        "evidence_scope": ["board_record"],
+        "visible_to": ["board", "executive"],
+        "raw": "Board minutes: current operating runway is 14 months under the approved plan."
+      }
+    },
+    {
+      "op": "capture",
+      "record": {
+        "id": "board.meeting.stub",
+        "channel": "calendar",
+        "occurred_at": "2026-09-15T18:00:00Z",
+        "author": {"id": "calendar:corporate", "kind": "provider"},
+        "evidence_grade": "record",
+        "evidence_scope": ["external_event"],
+        "visible_to": ["employee", "external_contractor"],
+        "raw": "Acme board meeting occurred September 15. Agenda and minutes restricted."
+      }
+    }
+  ],
+  "query": {"text": "What runway did the board approve?", "as_of": "2026-09-16T09:00:00Z"},
+  "expected": {
+    "relevant_record_ids": [],
+    "forbidden_output_record_ids": ["board.minutes.private"],
+    "claims": [],
+    "gaps": [
+      {"id": "caller_not_authorized", "description": "The caller lacks permission to read the relevant board record."}
+    ],
+    "decision": "deny",
+    "decision_reason": "Retrieval relevance does not override live access authority."
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.0",
+  "case_id": "incident-response.recovery-time.001",
+  "domain": "incident-response",
+  "title": "A bot declaration is not a provider recovery event",
+  "caller": {"principal": "engineer:omar", "roles": ["incident_commander"]},
+  "events": [
+    {
+      "op": "capture",
+      "record": {
+        "id": "incident.bot.resolved",
+        "channel": "slack",
+        "occurred_at": "2026-09-21T10:14:00Z",
+        "author": {"id": "bot:status-helper", "kind": "agent"},
+        "evidence_grade": "record",
+        "evidence_scope": ["authorship"],
+        "raw": "Incident INC-73 resolved at 10:14 UTC. All services healthy."
+      }
+    },
+    {
+      "op": "capture",
+      "record": {
+        "id": "incident.monitor.error",
+        "channel": "provider_webhook",
+        "occurred_at": "2026-09-21T10:22:00Z",
+        "author": {"id": "provider:uptime", "kind": "provider"},
+        "evidence_grade": "record",
+        "evidence_scope": ["provider_status"],
+        "raw": "INC-73 check api-primary: HTTP 503 at 10:22:00 UTC."
+      }
+    },
+    {
+      "op": "capture",
+      "record": {
+        "id": "incident.monitor.recovered",
+        "channel": "provider_webhook",
+        "occurred_at": "2026-09-21T10:26:00Z",
+        "author": {"id": "provider:uptime", "kind": "provider"},
+        "evidence_grade": "record",
+        "evidence_scope": ["provider_status"],
+        "raw": "INC-73 check api-primary: HTTP 200 recovery confirmed at 10:26:00 UTC."
+      }
+    }
+  ],
+  "query": {"text": "When was service recovery externally confirmed for INC-73?", "as_of": "2026-09-21T10:30:00Z"},
+  "expected": {
+    "relevant_record_ids": ["incident.monitor.recovered", "incident.monitor.error", "incident.bot.resolved"],
+    "forbidden_output_record_ids": [],
+    "claims": [
+      {"id": "recovery_confirmed_at_1026", "description": "The external monitor confirmed recovery at 10:26 UTC.", "supporting_record_ids": ["incident.monitor.recovered"]}
+    ],
+    "gaps": [],
+    "decision": "answer",
+    "decision_reason": "The provider callback establishes the observed recovery time; the earlier bot message establishes only its own statement."
+  }
+}

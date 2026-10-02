@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://finesample.com/schemas/voe-benchmark/case-v1.json",
+  "title": "Evidence Memory Benchmark case",
+  "type": "object",
+  "required": ["schema_version", "case_id", "domain", "title", "caller", "events", "query", "expected"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "case_id": {"type": "string", "minLength": 1},
+    "domain": {"type": "string", "minLength": 1},
+    "title": {"type": "string", "minLength": 1},
+    "caller": {
+      "type": "object",
+      "required": ["principal", "roles"],
+      "properties": {
+        "principal": {"type": "string"},
+        "roles": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}
+      }
+    },
+    "events": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["op"],
+        "properties": {
+          "op": {"enum": ["capture", "supersede", "redact"]},
+          "record": {"type": "object"},
+          "record_id": {"type": "string"},
+          "by_record_id": {"type": "string"}
+        }
+      }
+    },
+    "query": {
+      "type": "object",
+      "required": ["text", "as_of"],
+      "properties": {
+        "text": {"type": "string", "minLength": 1},
+        "as_of": {"type": "string", "format": "date-time"}
+      }
+    },
+    "expected": {
+      "type": "object",
+      "required": ["relevant_record_ids", "forbidden_output_record_ids", "claims", "gaps", "decision", "decision_reason"],
+      "properties": {
+        "relevant_record_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "forbidden_output_record_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "claims": {"type": "array", "items": {"type": "object"}},
+        "gaps": {"type": "array", "items": {"type": "object"}},
+        "decision": {"enum": ["answer", "withhold", "deny", "propose_action"]},
+        "decision_reason": {"type": "string"}
+      }
+    }
+  }
+}

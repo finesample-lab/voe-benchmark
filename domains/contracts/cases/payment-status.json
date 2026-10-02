@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.0",
+  "case_id": "contracts.payment-status.001",
+  "domain": "contracts",
+  "title": "An agent note cannot prove that an invoice was paid",
+  "caller": {"principal": "controller:jo", "roles": ["finance"]},
+  "events": [
+    {
+      "op": "capture",
+      "record": {
+        "id": "invoice.884",
+        "channel": "document",
+        "occurred_at": "2026-09-01T09:00:00Z",
+        "author": {"id": "org:northstar", "kind": "organization"},
+        "evidence_grade": "record",
+        "evidence_scope": ["invoice_issued"],
+        "raw": "Invoice 884; CAD 18,400; issued 2026-09-01; due 2026-09-30; bank reference NS-884."
+      }
+    },
+    {
+      "op": "capture",
+      "record": {
+        "id": "agent.payment.note",
+        "channel": "agent_write",
+        "occurred_at": "2026-09-28T11:00:00Z",
+        "author": {"id": "agent:collections", "kind": "agent"},
+        "evidence_grade": "record",
+        "evidence_scope": ["authorship"],
+        "raw": "Invoice 884 was paid this morning. Close collection task."
+      }
+    }
+  ],
+  "query": {"text": "Has invoice 884 been paid?", "as_of": "2026-09-28T12:00:00Z"},
+  "expected": {
+    "relevant_record_ids": ["invoice.884", "agent.payment.note"],
+    "forbidden_output_record_ids": [],
+    "claims": [
+      {"id": "invoice_884_is_due", "description": "Invoice 884 requests CAD 18,400 by September 30.", "supporting_record_ids": ["invoice.884"]}
+    ],
+    "gaps": [
+      {"id": "payment_receipt_missing", "description": "No bank or payment-provider receipt establishes settlement."}
+    ],
+    "decision": "withhold",
+    "decision_reason": "The agent note proves what the agent wrote, not that funds cleared."
+  }
+}

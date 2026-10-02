@@ -1,0 +1,57 @@
+{
+  "schema_version": "1.0",
+  "case_id": "manufacturing.supplier-certificate.001",
+  "domain": "manufacturing",
+  "title": "A revised certificate supersedes the earlier material grade",
+  "caller": {"principal": "engineer:ana", "roles": ["quality_engineer"]},
+  "events": [
+    {
+      "op": "capture",
+      "record": {
+        "id": "mfg.supplier.email",
+        "channel": "email",
+        "occurred_at": "2026-09-10T14:00:00Z",
+        "author": {"id": "person:supplier-sales", "kind": "human"},
+        "evidence_grade": "record",
+        "evidence_scope": ["authorship"],
+        "raw": "The shipment for heat H-88 was prepared as 7075 aluminum. Certificate to follow."
+      }
+    },
+    {
+      "op": "capture",
+      "record": {
+        "id": "mfg.coa.v1",
+        "channel": "document",
+        "occurred_at": "2026-09-10T16:00:00Z",
+        "author": {"id": "supplier:metals-co", "kind": "organization"},
+        "evidence_grade": "record",
+        "evidence_scope": ["certified_material"],
+        "raw": "Certificate of Analysis v1; heat H-88; alloy 7075; signed Quality Lab; issued 2026-09-10."
+      }
+    },
+    {
+      "op": "capture",
+      "record": {
+        "id": "mfg.coa.v2",
+        "channel": "document",
+        "occurred_at": "2026-09-11T09:00:00Z",
+        "author": {"id": "supplier:metals-co", "kind": "organization"},
+        "evidence_grade": "record",
+        "evidence_scope": ["certified_material"],
+        "raw": "Certificate of Analysis v2; replaces v1; heat H-88; alloy 6061-T6; signed Quality Lab; issued 2026-09-11."
+      }
+    },
+    {"op": "supersede", "record_id": "mfg.coa.v1", "by_record_id": "mfg.coa.v2"}
+  ],
+  "query": {"text": "What material grade is currently certified for heat H-88?", "as_of": "2026-09-11T10:00:00Z"},
+  "expected": {
+    "relevant_record_ids": ["mfg.coa.v2", "mfg.supplier.email"],
+    "forbidden_output_record_ids": ["mfg.coa.v1"],
+    "claims": [
+      {"id": "current_grade_6061_t6", "description": "The current signed certificate identifies 6061-T6.", "supporting_record_ids": ["mfg.coa.v2"]}
+    ],
+    "gaps": [],
+    "decision": "answer",
+    "decision_reason": "The signed replacement certificate establishes the current certified grade."
+  }
+}

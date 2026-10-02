@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://finesample.com/schemas/voe-benchmark/prediction-v1.json",
+  "title": "Evidence Memory Benchmark prediction",
+  "type": "object",
+  "required": ["case_id", "observed_sources", "retrieved_record_ids", "claims", "gaps", "decision"],
+  "properties": {
+    "case_id": {"type": "string", "minLength": 1},
+    "observed_sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["record_id", "sha256"],
+        "properties": {
+          "record_id": {"type": "string"},
+          "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+        }
+      }
+    },
+    "retrieved_record_ids": {"type": "array", "items": {"type": "string"}},
+    "claims": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "cited_record_ids"],
+        "properties": {
+          "id": {"type": "string"},
+          "cited_record_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}
+        }
+      }
+    },
+    "gaps": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "decision": {"enum": ["answer", "withhold", "deny", "propose_action"]},
+    "answer": {"type": "string"}
+  }
+}

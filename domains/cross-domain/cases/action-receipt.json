@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.0",
+  "case_id": "cross-domain.action-receipt.001",
+  "domain": "cross-domain",
+  "title": "A drafted or submitted action is not evidence of delivery",
+  "caller": {"principal": "operator:sam", "roles": ["operations"]},
+  "events": [
+    {
+      "op": "capture",
+      "record": {
+        "id": "action.email.proposal",
+        "channel": "agent_write",
+        "occurred_at": "2026-09-27T15:00:00Z",
+        "author": {"id": "agent:account-helper", "kind": "agent"},
+        "evidence_grade": "record",
+        "evidence_scope": ["authorship"],
+        "raw": "Proposal: send renewal terms to client C-19. Approval hash 7b1."
+      }
+    },
+    {
+      "op": "capture",
+      "record": {
+        "id": "action.email.submitted",
+        "channel": "agent_write",
+        "occurred_at": "2026-09-27T15:04:00Z",
+        "author": {"id": "agent:account-helper", "kind": "agent"},
+        "evidence_grade": "record",
+        "evidence_scope": ["authorship"],
+        "raw": "Submission attempted with idempotency key mail-C19-7b1. Provider response was not recorded."
+      }
+    }
+  ],
+  "query": {"text": "Were the renewal terms delivered to client C-19?", "as_of": "2026-09-27T15:10:00Z"},
+  "expected": {
+    "relevant_record_ids": ["action.email.submitted", "action.email.proposal"],
+    "forbidden_output_record_ids": [],
+    "claims": [
+      {"id": "submission_attempt_recorded", "description": "The agent recorded that it attempted submission with a named idempotency key.", "supporting_record_ids": ["action.email.submitted"]}
+    ],
+    "gaps": [
+      {"id": "provider_delivery_receipt_missing", "description": "No provider receipt establishes acceptance or delivery."}
+    ],
+    "decision": "withhold",
+    "decision_reason": "Agent-authored submission state is not an external delivery receipt."
+  }
+}

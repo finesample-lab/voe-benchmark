@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.0",
+  "case_id": "manufacturing.lot-release.001",
+  "domain": "manufacturing",
+  "title": "A safe temperature does not prove QA release",
+  "caller": {"principal": "planner:maya", "roles": ["production_planner"]},
+  "events": [
+    {
+      "op": "capture",
+      "record": {
+        "id": "mfg.sensor.17",
+        "channel": "sensor_export",
+        "occurred_at": "2026-09-12T08:15:00Z",
+        "author": {"id": "cold-room-2", "kind": "provider"},
+        "evidence_grade": "record",
+        "evidence_scope": ["external_event"],
+        "raw": "Cold Room 2; lot L-204; temperature 22.4 C; permitted range 20.0-24.0 C; probe calibrated 2026-09-01."
+      }
+    },
+    {
+      "op": "capture",
+      "record": {
+        "id": "mfg.chat.supervisor",
+        "channel": "slack",
+        "occurred_at": "2026-09-12T08:22:00Z",
+        "author": {"id": "person:lee", "kind": "human"},
+        "evidence_grade": "record",
+        "evidence_scope": ["authorship"],
+        "raw": "Lot L-204 looks fine from here. QA still needs to sign the release sheet."
+      }
+    },
+    {
+      "op": "capture",
+      "record": {
+        "id": "mfg.agent.summary",
+        "channel": "agent_write",
+        "occurred_at": "2026-09-12T08:25:00Z",
+        "author": {"id": "agent:shift-helper", "kind": "agent"},
+        "evidence_grade": "record",
+        "evidence_scope": ["authorship"],
+        "raw": "Lot L-204 has been released for packing."
+      }
+    }
+  ],
+  "query": {"text": "Can lot L-204 be released to packing?", "as_of": "2026-09-12T08:30:00Z"},
+  "expected": {
+    "relevant_record_ids": ["mfg.sensor.17", "mfg.chat.supervisor", "mfg.agent.summary"],
+    "forbidden_output_record_ids": [],
+    "claims": [
+      {"id": "storage_temperature_in_range", "description": "The recorded storage temperature was inside the permitted range.", "supporting_record_ids": ["mfg.sensor.17"]}
+    ],
+    "gaps": [
+      {"id": "qa_release_missing", "description": "No QA-signed release record is present."}
+    ],
+    "decision": "withhold",
+    "decision_reason": "The sensor record supports storage conditions, while neither a supervisor observation nor an agent page establishes QA release."
+  }
+}

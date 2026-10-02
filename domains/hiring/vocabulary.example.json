@@ -1,0 +1,9 @@
+{
+  "schema": "emb.domain-vocabulary",
+  "schema_version": 1,
+  "domain": "hiring",
+  "record_types": ["candidate", "role", "interview", "offer", "acceptance", "background_check"],
+  "relationship_types": ["applied_for", "interviewed_for", "offered_to", "accepts", "checks"],
+  "claim_types": ["offer_issued", "offer_accepted", "background_cleared"],
+  "gap_types": ["feedback_missing", "acceptance_unconfirmed", "background_provider_report_missing"]
+}
