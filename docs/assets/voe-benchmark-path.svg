@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 430" role="img" aria-labelledby="title desc">
+  <title id="title">The Voe Benchmark evaluation path</title>
+  <desc id="desc">Synthetic evidence enters a candidate system. Its prediction file is evaluated by an independent scorer across seven evidence dimensions.</desc>
+  <rect width="1200" height="430" rx="18" fill="#F7FAF9"/>
+  <rect x="1" y="1" width="1198" height="428" rx="17" fill="none" stroke="#D4DEDB" stroke-width="2"/>
+
+  <g font-family="Instrument Sans, Arial, sans-serif">
+    <g fill="#7A8E90" font-size="12" font-weight="600" letter-spacing="1.5">
+      <text x="58" y="58">1 · PUBLIC FIXTURE</text>
+      <text x="346" y="58">2 · YOUR SYSTEM</text>
+      <text x="634" y="58">3 · PREDICTION</text>
+      <text x="922" y="58">4 · SCORER</text>
+    </g>
+
+    <g fill="#FFFFFF" stroke="#D4DEDB" stroke-width="1.5">
+      <rect x="58" y="81" width="220" height="120" rx="12"/>
+      <rect x="346" y="81" width="220" height="120" rx="12"/>
+      <rect x="634" y="81" width="220" height="120" rx="12"/>
+      <rect x="922" y="81" width="220" height="120" rx="12"/>
+    </g>
+    <g fill="#12242A" font-size="18" font-weight="600">
+      <text x="84" y="118">Synthetic records</text>
+      <text x="372" y="118">Any implementation</text>
+      <text x="660" y="118">One JSONL row</text>
+      <text x="948" y="118">Offline evaluation</text>
+    </g>
+    <g fill="#3A5257" font-size="14">
+      <text x="84" y="146">Claims, gaps, decisions,</text>
+      <text x="84" y="167">scope, and lifecycle</text>
+      <text x="372" y="146">API, local model, search,</text>
+      <text x="372" y="167">agent, or record system</text>
+      <text x="660" y="146">Claims, citations, gaps,</text>
+      <text x="660" y="167">decision, and raw hashes</text>
+      <text x="948" y="146">No network and no call</text>
+      <text x="948" y="167">back into your system</text>
+    </g>
+
+    <g fill="none" stroke="#2F6D64" stroke-width="2">
+      <path d="M292 141 H326"/>
+      <path d="M318 134 L326 141 L318 148"/>
+      <path d="M580 141 H614"/>
+      <path d="M606 134 L614 141 L606 148"/>
+      <path d="M868 141 H902"/>
+      <path d="M894 134 L902 141 L894 148"/>
+    </g>
+
+    <text x="58" y="253" fill="#7A8E90" font-size="12" font-weight="600" letter-spacing="1.5">THE RESULT CANNOT HIDE A WEAK DIMENSION</text>
+
+    <g font-size="13" font-weight="600" text-anchor="middle">
+      <g fill="#E2EDEA" stroke="#B7C9C4">
+        <rect x="58" y="278" width="142" height="52" rx="10"/>
+        <rect x="211" y="278" width="142" height="52" rx="10"/>
+        <rect x="364" y="278" width="142" height="52" rx="10"/>
+        <rect x="517" y="278" width="142" height="52" rx="10"/>
+        <rect x="670" y="278" width="142" height="52" rx="10"/>
+        <rect x="823" y="278" width="142" height="52" rx="10"/>
+        <rect x="976" y="278" width="166" height="52" rx="10"/>
+      </g>
+      <g fill="#12242A">
+        <text x="129" y="309">Capture</text>
+        <text x="282" y="309">Retrieval</text>
+        <text x="435" y="309">Claims</text>
+        <text x="588" y="309">Provenance</text>
+        <text x="741" y="309">Gaps</text>
+        <text x="894" y="309">Decision</text>
+        <text x="1059" y="309">Lifecycle</text>
+      </g>
+    </g>
+
+    <rect x="58" y="361" width="1084" height="38" rx="19" fill="#F5EBDB"/>
+    <text x="600" y="385" text-anchor="middle" fill="#A66A1F" font-size="13" font-weight="600">Per-dimension floors and zero critical failures are required for a release pass</text>
+  </g>
+</svg>
